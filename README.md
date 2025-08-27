@@ -157,6 +157,12 @@ The migration function is idempotent and admin-gated (requires appropriate admin
 
 ---
 
+## Test file
+
+- Resolves runtime environment (Playground pg or Anchor program) and builds a compatible provider/wallet.
+- Creates two SPL mints (A and B) and mints test tokens to the caller's associated token accounts.
+- Derives PDAs used by the program: pool, vaults, treasuries, orderbook, and position (with exact seeds).
+
 ## 📣 Roadmap Ideas
 
 - Off-chain indexer for band digests & historical analytics.
