@@ -139,4 +139,38 @@ Helpful test tools:
 
 ---
 
+## 📐 Constants & Sizing
+POOL_SPACE      = 16 * 1024
+ORDERBOOK_SPACE = 16 * 1024
+METRICS_SPACE   = 8_000   # increase if you grow per-band state
+
+MAX_BANDS   = 64
+MAX_ADMINS  = 8
+METRICS_CAP = 128
+
+---
+
+## 🔄 Migration
+
+migrate_pool_versions upgrades older pools to v3 and recomputes derived state.
+The migration function is idempotent and admin-gated (requires appropriate admin/quorum checks).
+
+---
+
+## 📣 Roadmap Ideas
+
+- Off-chain indexer for band digests & historical analytics.
+
+- Richer fee schedules and configurable maker rebates (time/volume based).
+
+- Optional compressed metrics storage for extended on-chain history (to save space).
+
+- Oracle integration (Pyth / Switchboard / Chainlink) for improved price and market data.
+
+- Governance-driven initialization & migrations for safer production deployments.
+
+  ---
+
+## LICENSE - MIT LICENSE
+
 
