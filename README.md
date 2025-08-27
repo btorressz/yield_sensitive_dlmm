@@ -130,4 +130,13 @@ Helpful test tools:
 
 ---
 
+## 🔐 Security Considerations
+
+- **PDA authority correctness:** verify pool PDA seeds when deploying — all treasury transfers use pool PDA signer.
+- **Integer safety:** fee accrual uses u128 intermediates and `mul_div_1e18` — review potential overflows during high throughput.
+- **Governance & multisig:** validate admin quorum logic and secure key management for `oracle_signer` and admin keys.
+- **Bounty logic & drains:** `emergency_drain` requires the pool to be paused — still carefully restrict role privileges.
+
+---
+
 
