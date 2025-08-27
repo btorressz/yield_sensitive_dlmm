@@ -54,3 +54,41 @@ Per-pool on-chain book with `bids`, `asks` (vectors of `PriceLevel`) and `event_
 Circular buffer storing recent `MetricItem` entries: `slot`, `center_price_1e6`, `width_bps`, `hash`.
 
 ---
+
+## 🔧 Core Instructions (high-level)
+
+### `initialize_pool(ctx, p: InitParamsV3)`
+Creates a v3 `Pool` PDA and associated vaults/treasuries. Key knobs in `InitParamsV3`:
+- Multisig & roles: `admins`, `admin_threshold`, `risk_admin`, `ops_admin`, `fee_admin`.
+- Band configuration: `n_bands`, `base_width_bps`, `min/max_width_bps`, `width_slope_per_kbps`, `decay_per_band_bps`.
+- EMA alphas & limits: `alpha_y_bps`, `alpha_spot_bps`, `alpha_twap_bps`, `alpha_vol_bps`, `max_twap_dev_bps`.
+- Fees & bounty: `fee_base_bps`, `fee_k_per_bps`, `fee_max_bps`, `bounty_rate_microunits`, etc.
+
+`initialize_pool` computes initial bands via `recompute_bands` and validates invariants.
+
+### `post_yields_and_update(ctx, y_a_bps_raw, y_b_bps_raw, spot_price_1e6_raw, cu_price_micro_lamports)`
+Keeper/updater entrypoint that:
+- Validates caller (updater or admin), optional oracle signer.
+- Applies EMAs for yields and spot price and calculates candidate center/width.
+- Enforces TWAP deviation guard and hysteresis counters before committing changes.
+- Updates volatility EMA and computes dynamic fee (`fee_current_bps`).
+- Calls `recompute_bands`, `mark_inactive_by_floor`, `renormalize_active_weights`.
+- Pays bounty to caller via `pay_bounty_if_any` and emits `BandsDigestUpdatedV`.
+
+Guards: cooldown slots, min CU price, hysteresis thresholds, TWAP deviation limits.
+
+### Liquidity ops
+- `add_liquidity`: deposits A/B into vaults and mints `Position` shares (checks deposit ratio guard).
+- `remove_liquidity`: burns shares, transfers proportional reserves from vaults back to user using pool PDA signer.
+- `collect_fees`: computes owed fees using `fee_growth_*` deltas and transfers from `treasury_*` to user.
+
+All protocol transfers use `pool_signer_seeds(pool)` as the authority.
+
+### Orderbook ops
+- `init_orderbook`: creates `OrderBook` PDA with tick sizing and per-level capacity.
+- `place_order`: supports `post_only`, `tif`, `reduce_only`, `client_id` and routes based on `RouteMode`.
+- `match_against_book` & `take_from_bands`: matching logic for orderbook and DLMM band liquidity.
+- `crank_match`: loops to clear crossable top levels (useful for matchers / crankers).
+
+---
+
