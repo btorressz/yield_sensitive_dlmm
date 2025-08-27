@@ -9,3 +9,16 @@ This is a proof-of-concept developed in Solana Playground for research purposes.
 
 
 ---
+
+
+## ✅ Key Features
+
+- **Yield-sensitive bands:** center & width adapt to EMAs of yields and spot price.  
+- **Hysteresis & circuit breakers:** prevents noisy or large sudden updates.  
+- **Dynamic fees:** volatility-driven fee adjustments with maker/taker split knobs.  
+- **Hybrid routing:** `BookFirst` or `DlmmFirst` routing modes for orders.  
+- **Multisig admin model:** up to `MAX_ADMINS` with a configurable quorum threshold.  
+- **Bounty system:** rewards keepers that call `post_yields_and_update` when meaningful changes occur.  
+- **On-chain metrics & band digest:** digest emitted for off-chain verification and monitoring.
+
+---
