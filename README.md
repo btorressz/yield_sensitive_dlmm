@@ -92,3 +92,28 @@ All protocol transfers use `pool_signer_seeds(pool)` as the authority.
 
 ---
 
+
+## 🔔 Events
+
+Use these for off-chain indexing and monitoring:
+- `PoolInitializedV`, `PoolMigratedV`
+- `BandsDigestUpdatedV`, `SimulatedBandsDigestV`
+- `LiquidityAddedV`, `LiquidityRemovedV`, `FeesCollectedV`
+- `OrderPlacedV3`, `OrderFilledV3`, `OrderCanceledV3`
+- `DepthSnapshotV`, `SwapFilledV`, `ParamsProposedV`, `ParamsExecutedV`, `EmergencyDrainV`
+
+---
+
+## ⚠️ Errors & Important Guards
+
+Common errors: `BadMultisig`, `InvalidNBands`, `ProposalExists`, `AlreadyMigrated`, `Unauthorized`, `MissingOracleSigner`, `CuPriceTooLow`, `CooldownNotElapsed`, `DeviationTooHigh`, `HysteresisNotMet`, `VaultMintMismatch`, `InvariantViolated`, `NonMonotonicBands`, `InvalidBandRange`, `WeightSumInvalid`, `ParamOutOfRange`, `DepositRatioOutOfBounds`, `BandInactive`, `ZeroShares`, `PositionLocked`, `ZeroAmount`, `InvalidBandIndex`, `MathOverflow`, `Paused`, `NotFound`.
+
+Runtime guards include:
+- Monotonic band ranges and weight sum checks via `assert_invariants`.
+- Hysteresis counters + TWAP deviation checks to avoid reacting to noise.
+- Cooldown slots & min CU price to prevent spamby keepers.
+- Deposit ratio guard to prevent unsafe one-sided deposits.
+
+---
+
+
