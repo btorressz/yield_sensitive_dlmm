@@ -116,4 +116,18 @@ Runtime guards include:
 
 ---
 
+## 🧪 Testing Recommendations
+
+Test flows to cover:
+- `initialize_pool` and band initialization invariants.
+- `post_yields_and_update` across multiple slots to validate EMA, hysteresis, fee updates, and bounty payouts.
+- LP lifecycle: `add_liquidity` → `collect_fees` → `remove_liquidity` (validate fee accounting and position semantics).
+- Orderbook lifecycle: `init_orderbook`, `place_order`, `match_against_book`, `crank_match`, `prune_expired`.
+- Edge cases: TWAP deviation rejection, inactive floor behavior, and param limits.
+
+Helpful test tools:
+- deterministic PDAs for pools/mints, slot manipulation, and a helper to simulate repeated `post_yields_and_update` calls.
+
+---
+
 
