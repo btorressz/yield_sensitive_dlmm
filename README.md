@@ -1,4 +1,4 @@
-# # Yield-Sensitive DLMM - (yield_sensitive_dlmm)
+# Yield-Sensitive DLMM - (yield_sensitive_dlmm)
 
 
 
